@@ -1,0 +1,54 @@
+[
+  {
+    "pillar": "dsp",
+    "title": "Radar Signal Processing Toolkit",
+    "desc": "FMCW/OFDM sims, fixed-point FPGA protos, notebooks with unit-tested estimators.",
+    "tags": ["DSP", "FPGA", "Python"],
+    "links": [
+      {"label": "Repo", "href": "https://github.com/YOURUSER/radar-toolkit"},
+      {"label": "Benchmarks (PDF)", "href": "/assets/radar_benchmarks.pdf"}
+    ]
+  },
+  {
+    "pillar": "dsp",
+    "title": "Audio Denoiser",
+    "desc": "DL denoising with MOS/PESQ/ESTOI and ablations with error bars.",
+    "tags": ["Audio", "Deep Learning"],
+    "repo": "Menstuk/audio",
+    "links": [
+      {"label": "Report", "href": "/assets/denoiser_report.pdf"},
+      {"label": "Repo", "href": "https://github.com/Menstuk/audio"}
+    ]
+  },
+  {
+    "pillar": "comms",
+    "title": "Carrier Recovery Labs",
+    "desc": "Kay-style estimators, code + writeups aligned with Mengali; runnable labs.",
+    "tags": ["Synchronization", "Teaching"],
+    "links": [
+      {"label": "Labs (PDF)", "href": "/assets/labs.pdf"},
+      {"label": "Notes", "href": "/assets/comms_notes.pdf"}
+    ]
+  },
+  {
+    "pillar": "analog",
+    "title": "Analog NN Block (TSMC65)",
+    "desc": "Feed-forward cell with HW-aware training and Virtuoso co-sim; power/accuracy evidence.",
+    "tags": ["CMOS65", "Virtuoso", "HW-aware"],
+    "links": [
+      {"label": "MNIST Results", "href": "/assets/mnist_results.pdf"},
+      {"label": "Power Table (CSV)", "href": "/assets/power_table.csv"},
+      {"label": "Repo", "href": "https://github.com/YOURUSER/analog-nn-block"}
+    ]
+  },
+  {
+    "pillar": "digital",
+    "title": "Digital Circuits Course",
+    "desc": "Gray counters, FSMs, timing; assignments and solutions.",
+    "tags": ["RTL", "Verification", "Teaching"],
+    "links": [
+      {"label": "Outline", "href": "/assets/digital_course_outline.pdf"},
+      {"label": "Assignments (ZIP)", "href": "/assets/assignments.zip"}
+    ]
+  }
+]

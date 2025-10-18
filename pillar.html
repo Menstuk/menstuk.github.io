@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pillar — Projects</title>
+  <meta name="color-scheme" content="light dark" />
+  <meta name="description" content="Engineering pillar projects." />
+  <style>
+    :root{--bg:#0b0c10;--fg:#e8eaf0;--muted:#a4adbe;--card:#151822;--border:#2a3244;--brand:#4f7cff}
+    @media (prefers-color-scheme: light){:root{--bg:#fbfbfd;--fg:#0b0c10;--muted:#5a6478;--card:#fff;--border:#dfe3ea;--brand:#2446d6}}
+    html,body{margin:0;padding:0}
+    body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .container{max-width:1100px;margin:0 auto;padding:24px}
+    header{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:16px 0 24px;border-bottom:1px solid var(--border)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .crumbs{font-size:14px;color:var(--muted)}
+    h1{font-size:clamp(22px,4vw,36px);margin:20px 0 8px}
+    .subtitle{color:var(--muted);margin-top:0}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;cursor:default}
+    .card h3{margin:0 0 6px;font-size:18px}
+    .card p{margin:6px 0 0;color:var(--muted);font-size:14px}
+    .meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+    .tag{font-size:11px;color:var(--muted);border:1px solid var(--border);padding:2px 6px;border-radius:999px}
+    footer{margin:24px 0 48px;color:var(--muted);border-top:1px solid var(--border);padding-top:16px;font-size:13px}
+
+    /* Modal */
+    #repo-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; }
+    #repo-modal { position: fixed; top: 5vh; left: 50%; transform: translateX(-50%); width: min(900px, 92vw); height: 90vh; background: var(--card); color: var(--fg); border:1px solid var(--border); border-radius: 12px; display: none; }
+    #repo-modal header { display:flex; justify-content: space-between; align-items:center; padding: 10px 14px; border-bottom: 1px solid var(--border); }
+    #repo-modal .title { font-weight: 600; }
+    #repo-modal .actions a, #repo-modal .actions button { margin-left: 10px; }
+    #repo-modal .content { padding: 12px 14px; height: calc(90vh - 56px); overflow: auto; }
+    #repo-modal .close { background: transparent; border: 1px solid var(--border); color: var(--fg); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+    #repo-modal .openrepo { background: var(--brand); border: none; color: white; border-radius: 8px; padding: 6px 10px; text-decoration: none; }
+    #repo-modal .muted { color: var(--muted); font-size: 13px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div><a href="/index.html">← Back to portfolio</a></div>
+      <nav class="crumbs">Pillar / <span id="crumb"></span></nav>
+    </header>
+
+    <main>
+      <h1 id="title">Pillar</h1>
+      <p class="subtitle" id="subtitle"></p>
+      <div class="grid" id="projects"></div>
+    </main>
+
+    <footer>© <span id="year"></span> Martin Raskin</footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="repo-modal-backdrop"></div>
+  <div id="repo-modal" role="dialog" aria-modal="true" aria-labelledby="repo-modal-title">
+    <header>
+      <div class="title" id="repo-modal-title">Loading…</div>
+      <div class="actions">
+        <a id="repo-modal-open" class="openrepo" href="#" target="_blank" rel="noopener">Open Repo ↗</a>
+        <button class="close" id="repo-modal-close">Close</button>
+      </div>
+    </header>
+    <div class="content">
+      <p class="muted">Fetching README…</p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const p = (params.get("p") || "").toLowerCase();
+    const NAMES = {
+      dsp:    {title:"DSP",              subtitle:"Practical estimators & pipelines with hard evidence and deployability."},
+      comms:  {title:"Communications",   subtitle:"Synchronization and link-level simulation — bridging theory to runnable code."},
+      analog: {title:"Analog Design",    subtitle:"CMOS65 blocks for analog inference: robustness, co-sim, HW-aware training."},
+      digital:{title:"Digital & Teaching",subtitle:"Logic design pedagogy, timing, verification, and testability."}
+    };
+    const meta = NAMES[p];
+
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+    const titleEl = document.getElementById("title");
+    const subtitleEl = document.getElementById("subtitle");
+    const crumbEl = document.getElementById("crumb");
+    const gridEl = document.getElementById("projects");
+
+    function setMeta({title, description}) {
+      document.title = title;
+      let m = document.querySelector('meta[name="description"]');
+      if (!m) { m = document.createElement('meta'); m.setAttribute('name','description'); document.head.appendChild(m); }
+      m.setAttribute('content', description);
+    }
+
+    function renderUnknown() {
+      titleEl.textContent = "Unknown Pillar";
+      subtitleEl.textContent = "Use ?p=dsp | comms | analog | digital";
+      setMeta({title:"Unknown Pillar — Projects", description:"Pick a valid pillar to view projects."});
+    }
+
+    function renderHeader() {
+      titleEl.textContent = meta.title;
+      subtitleEl.textContent = meta.subtitle;
+      crumbEl.textContent = meta.title;
+      setMeta({title: `${meta.title} — Projects`, description: meta.subtitle});
+    }
+
+    // per-session README cache
+    const README_CACHE = new Map();
+
+    function makeCard(it) {
+      const article = document.createElement("article");
+      article.className = "card";
+      article.innerHTML = `
+        <h3>${it.title}</h3>
+        <p>${it.desc}</p>
+        <div class="meta">${(it.tags||[]).map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+        <p class="subtitle" style="margin-top:8px;">
+          ${(it.links||[]).map(l=>`<a href="${l.href}">${l.label}</a>`).join(" · ")}
+        </p>
+        ${it.repo ? `<p class="subtitle" style="margin-top:4px;"><a href="#" data-openrepo="${it.repo}">Preview README</a></p>` : ""}
+      `;
+
+      if (it.repo) {
+        // make the whole card open the modal, but allow normal clicks on regular links
+        article.style.cursor = "pointer";
+        article.addEventListener("click", (ev) => {
+          const a = ev.target.closest("a");
+          if (a && !a.hasAttribute("data-openrepo")) return; // let normal links work
+          ev.preventDefault();
+          openRepoPreview(it);
+        });
+      }
+      return article;
+    }
+
+    function renderProjects(list) {
+      gridEl.innerHTML = "";
+      const items = list.filter(d => d.pillar === p);
+      for (const it of items) gridEl.appendChild(makeCard(it));
+    }
+
+    async function openRepoPreview(it) {
+      const modal = document.getElementById("repo-modal");
+      const backdrop = document.getElementById("repo-modal-backdrop");
+      const title = document.getElementById("repo-modal-title");
+      const openBtn = document.getElementById("repo-modal-open");
+      const content = modal.querySelector(".content");
+
+      title.textContent = it.title;
+      openBtn.href = `https://github.com/${it.repo}`;
+      content.innerHTML = `<p class="muted">Fetching README for <code>${it.repo}</code>…</p>`;
+
+      backdrop.style.display = "block";
+      modal.style.display = "block";
+
+      try {
+        const md = await fetchReadme(it.repo);
+        content.innerHTML = marked.parse(md);
+        content.querySelectorAll("a").forEach(a => (a.target = "_blank", a.rel = "noopener"));
+      } catch (e) {
+        content.innerHTML = `
+          <p class="muted">Could not load README. Open the repository directly:</p>
+          <p><a href="https://github.com/${it.repo}" target="_blank" rel="noopener">https://github.com/${it.repo}</a></p>
+        `;
+        console.warn(e);
+      }
+    }
+
+    async function fetchReadme(repo) {
+      if (README_CACHE.has(repo)) return README_CACHE.get(repo);
+      const branches = ["HEAD", "main", "master"];
+      let lastErr;
+      for (const br of branches) {
+        const url = `https://raw.githubusercontent.com/${repo}/${br}/README.md`;
+        try {
+          const r = await fetch(url, { cache: "no-store" });
+          if (r.ok) {
+            const text = await r.text();
+            README_CACHE.set(repo, text);
+            return text;
+          }
+          lastErr = new Error(`HTTP ${r.status}`);
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error("README not found");
+    }
+
+    // Close modal on backdrop or button
+    document.addEventListener("click", (ev) => {
+      if (ev.target.id === "repo-modal-close" || ev.target.id === "repo-modal-backdrop") {
+        document.getElementById("repo-modal").style.display = "none";
+        document.getElementById("repo-modal-backdrop").style.display = "none";
+      }
+    });
+
+    // Init
+    (async function init() {
+      if (!meta) return renderUnknown();
+      renderHeader();
+
+      try {
+        const res = await fetch("/assets/projects.json", {cache:"no-store"});
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        renderProjects(data);
+      } catch (e) {
+        console.warn("Falling back: couldn't fetch /assets/projects.json", e);
+        // very small fallback so the page still shows something in file:// preview
+        renderProjects([]);
+      }
+    })();
+  </script>
+</body>
+</html>

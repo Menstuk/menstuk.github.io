@@ -1,1 +1,245 @@
-"<h1>Hello world, site is live!</h1>" 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Martin Raskin — Engineering Portfolio</title>
+  <meta name="description" content="Engineering portfolio: projects, research, publications, teaching, talks, and contact." />
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="Martin Raskin — Engineering Portfolio" />
+  <meta property="og:description" content="Projects, research, publications, teaching, talks, and contact." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://YOURUSER.github.io/" />
+  <meta property="og:image" content="/assets/og-image.png" />
+  <link rel="icon" href="/assets/favicon.ico">
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --fg: #e8eaf0;
+      --muted: #a4adbe;
+      --brand: #4f7cff;
+      --card: #151822;
+      --border: #2a3244;
+      --accent: #9bb1ff;
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg:#fbfbfd; --fg:#0b0c10; --muted:#5a6478; --card:#ffffff; --border:#dfe3ea; --brand:#2446d6; --accent:#5c7cff; }
+    }
+    html, body { margin:0; padding:0; }
+    body { background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header { display:grid; grid-template-columns:1fr auto; gap:16px; align-items:center; padding: 16px 0 24px; border-bottom:1px solid var(--border); position: sticky; top:0; backdrop-filter: blur(6px); background: color-mix(in srgb, var(--bg) 85%, transparent); }
+    header .name { font-weight: 700; letter-spacing: 0.2px; }
+    nav a { color:var(--muted); text-decoration:none; margin-left:18px; font-size: 14px; }
+    nav a:hover { color:var(--fg); }
+    .hero { padding:48px 0 24px; display:grid; grid-template-columns: 1.3fr 1fr; gap:24px; }
+    .hero h1 { font-size: clamp(28px, 5vw, 40px); line-height:1.15; margin:0 0 12px; }
+    .hero p { margin:6px 0 0; color:var(--muted); }
+    .cta { margin-top: 16px; display:flex; gap:12px; flex-wrap:wrap; }
+    .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:var(--card); color:var(--fg); text-decoration:none; font-weight:600; transition: transform .12s ease, box-shadow .12s ease; }
+    .btn.primary { background:var(--brand); border-color:transparent; color:white; }
+    .btn:hover { transform: translateY(-1px); }
+
+    section { padding: 28px 0; }
+    section h2 { font-size: 22px; margin: 0 0 12px; }
+
+    /* Pillars grid: single row on wide screens */
+    .pillars-grid { display:grid; grid-template-columns: repeat(4, minmax(200px, 1fr)); gap:16px; }
+    @media (max-width: 1024px) { .pillars-grid { grid-template-columns: repeat(2, minmax(200px, 1fr)); } }
+    @media (max-width: 640px) { .pillars-grid { grid-template-columns: 1fr; } }
+
+    .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:12px; transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease; }
+    .card h3 { margin:0 0 4px; font-size:16px; }
+    .card p { margin:4px 0 0; color:var(--muted); font-size: 13px; }
+
+    /* Make entire pillar cards clickable */
+    .card-link { text-decoration:none; color:inherit; display:block; }
+    .card-link .card { cursor:pointer; }
+    .card-link:hover .card { transform: translateY(-2px); box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
+
+    /* Projects grid larger cards */
+    .projects-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; }
+    .projects-grid .card h3 { font-size:18px; }
+    .projects-grid .card p { font-size:14px; }
+
+    .twocol { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    @media (max-width: 840px) { .hero { grid-template-columns: 1fr; } .twocol { grid-template-columns: 1fr; } }
+
+    footer { margin: 24px 0 48px; color:var(--muted); border-top:1px solid var(--border); padding-top:16px; font-size: 13px; }
+
+    pre { background: var(--card); border:1px solid var(--border); padding:12px; border-radius:12px; overflow:auto; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="name">Martin Raskin · Engineering Portfolio</div>
+      <nav>
+        <a href="#pillars">Pillars</a>
+        <a href="#projects">Projects</a>
+        <a href="#research">Research</a>
+        <a href="#teaching">Teaching</a>
+        <a href="#publications">Publications</a>
+        <a href="#talks">Talks</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1>Multidisciplinary engineer — depth proven by evidence.</h1>
+        <p>I operate across analog design, DSP, communications, and digital logic. The common thread is rigorous problem framing, constraints-first design, and measurable outcomes. Below you’ll find case‑studies with artifacts: data, plots, PDFs, and code tied to commit SHAs.</p>
+        <div class="cta">
+          <a class="btn primary" href="#pillars">See my pillars</a>
+          <a class="btn" href="#projects">View projects</a>
+          <a class="btn" href="/assets/CV.pdf">Download CV</a>
+        </div>
+      </div>
+      <div class="card">
+        <h3>How to read this portfolio</h3>
+        <p class="small">For each item: <em>Problem → Constraints → Design choices → Evidence</em>. Breadth is not dilution; it’s systems thinking. Evidence ties breadth to depth.</p>
+        <ul class="small">
+          <li>Artifacts include PDFs, notebook plots, CSVs, and reproducible scripts.</li>
+          <li>Where possible, baselines and A/B comparisons are provided.</li>
+          <li>Each case ends with “What I’d improve next.”</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="pillars">
+      <h2>Engineering Pillars</h2>
+      <p class="small">Four domains, each demonstrated with shipped work and teaching artifacts. Click through to see related projects.</p>
+      <div class="pillars-grid">
+        <a class="card-link" href="pillar.html?p=dsp">
+          <article class="card">
+            <h3>DSP</h3>
+            <p>Practical pipelines and estimators (FMCW/OFDM, denoising). Emphasis on statistical efficiency and fixed‑point deployability.</p>
+          </article>
+        </a>
+        <a class="card-link" href="pillar.html?p=comms">
+          <article class="card">
+            <h3>Communications</h3>
+            <p>Synchronization, carrier recovery, and link‑level simulation. Bridging theory (Kay/Mengali) to runnable code and labs.</p>
+          </article>
+        </a>
+        <a class="card-link" href="pillar.html?p=analog">
+          <article class="card">
+            <h3>Analog Design</h3>
+            <p>CMOS65 cells for analog NN inference. Hardware‑aware training, Cadence co‑sim, and robustness modeling.</p>
+          </article>
+        </a>
+        <a class="card-link" href="pillar.html?p=digital">
+          <article class="card">
+            <h3>Digital & Teaching</h3>
+            <p>Curriculum and labs for logic, Gray counters, FSMs; focus on timing, verification, and testability.</p>
+          </article>
+        </a>
+      </div>
+    </section>
+
+    <section id="projects">
+      <h2>Featured Projects</h2>
+      <div class="projects-grid">
+        <article class="card">
+          <h3>Analog Neural Network Block (TSMC65)</h3>
+          <p>Feed‑forward inference cell with hardware‑aware training and Cadence co‑sim. Comparable MNIST accuracy to digital baselines at low power.</p>
+          <div class="meta">
+            <span class="tag">CMOS 65 nm</span>
+            <span class="tag">HW‑aware training</span>
+            <span class="tag">Cadence Virtuoso</span>
+          </div>
+          <p class="small">Evidence: <a href="/assets/mnist_results.pdf">MNIST results (PDF)</a>, <a href="/assets/power_table.csv">power table (CSV)</a>, <a href="https://github.com/YOURUSER/analog-nn-block">repo</a></p>
+        </article>
+        <article class="card">
+          <h3>Radar Signal Processing Toolkit</h3>
+          <p>Modular pipeline for FMCW/OFDM simulations, fixed‑point FPGA protos, and Python notebooks with unit‑tested estimators.</p>
+          <div class="meta">
+            <span class="tag">DSP</span>
+            <span class="tag">FPGA</span>
+            <span class="tag">Python</span>
+          </div>
+          <p class="small">Evidence: <a href="https://github.com/YOURUSER/radar-toolkit">repo</a>, <a href="/assets/radar_benchmarks.pdf">benchmarks</a></p>
+        </article>
+        <article class="card">
+          <h3>Noise‑Canceling ML App</h3>
+          <p>Deep learning denoiser with training scripts, MOS/PESQ/ESTOI reporting, and ablation studies with error bars.</p>
+          <div class="meta">
+            <span class="tag">PyTorch/TensorFlow</span>
+            <span class="tag">Audio</span>
+            <span class="tag">MLOps</span>
+          </div>
+          <p class="small">Evidence: <a href="/assets/denoiser_report.pdf">report</a>, <a href="https://github.com/YOURUSER/noise-canceling">repo</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="research" class="twocol">
+      <div>
+        <h2>Research</h2>
+        <p>Interests: analog computation for AI, mixed‑signal accelerators, synchronization for digital receivers.</p>
+        <ul>
+          <li>Thesis: Analog neural network processor in TSMC65 — modeling, robustness, E2E cosim.</li>
+          <li>Notes: hardware‑aware training, charge sharing models, and energy/latency tradeoffs.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Publications (sel.)</h2>
+        <ul>
+          <li>Raskin, M., et al. <em>Low‑Power Analog NN Inference in CMOS65</em>, 2025. <a href="/assets/paper.pdf">PDF</a></li>
+          <li>— add more here —</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="teaching" class="twocol">
+      <div>
+        <h2>Teaching</h2>
+        <ul>
+          <li>Digital Circuits — Gray code counters, FSMs, timing analysis.</li>
+          <li>Signal Processing — synchronization, linear modulations.</li>
+          <li>Workshops — robotics build‑a‑thon, pre‑military tech programs.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Talks</h2>
+        <ul>
+          <li>Analog AI beyond GPUs — energy vs. accuracy frontiers.</li>
+          <li>From SDR to Algorithms — building end‑to‑end systems.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="publications">
+      <h2>Selected Evidence & Artifacts</h2>
+      <div class="projects-grid">
+        <article class="card">
+          <h3>Benchmark Plots</h3>
+          <p class="small">PNG/SVG plots generated from notebooks; include seeds, commit SHAs, and configs.</p>
+        </article>
+        <article class="card">
+          <h3>Design Docs</h3>
+          <p class="small">Short PDFs with constraints, options considered, decisions, and post‑mortems.</p>
+        </article>
+        <article class="card">
+          <h3>Test Coverage/CI</h3>
+          <p class="small">Badges and coverage reports linked to specific releases.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>Email: <a href="mailto:YOUR.EMAIL@example.com">YOUR.EMAIL@example.com</a> · LinkedIn: <a href="https://www.linkedin.com/in/YOUR-LINKEDIN/">/in/YOUR-LINKEDIN</a> · GitHub: <a href="https://github.com/YOURUSER">@YOURUSER</a></p>
+      <p class="small">Tip: for a contact form on GitHub Pages, use a service like Formspree or just link your email.</p>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Martin Raskin. Built with plain HTML/CSS. Auto‑deploys on GitHub Pages.
+    </footer>
+  </div>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
